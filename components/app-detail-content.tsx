@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowUpRight, Github } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Code2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/data/apps";
@@ -52,7 +52,7 @@ export function AppDetailContent({ slug, locale }: { slug: string; locale: Local
           </a>
           {app.repo ? (
             <a href={app.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-bold text-navy transition hover:border-teal">
-              <Github size={17} />
+              <Code2 size={17} />
               {dict.apps.repo}
             </a>
           ) : null}
