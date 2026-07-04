@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { apps, type Locale } from "@/data/apps";
 
@@ -33,7 +34,6 @@ export function UtilitiesClient({ locale }: { locale: Locale }) {
   }, [score]);
 
   const copy = locale === "en" ? {
-    title: "Interactive utilities",
     number: "Document number helper",
     date: "Date formatter",
     checklist: "Procurement checklist",
@@ -48,7 +48,6 @@ export function UtilitiesClient({ locale }: { locale: Locale }) {
     score: "Score on 5 scale",
     result: "Result on 4 scale"
   } : {
-    title: "Utilities interaktif",
     number: "Bantuan nomor dokumen",
     date: "Format tanggal",
     checklist: "Checklist pengadaan",
@@ -115,7 +114,7 @@ export function UtilitiesClient({ locale }: { locale: Locale }) {
   );
 }
 
-function UtilityCard({ title, children }: { title: string; children: React.ReactNode }) {
+function UtilityCard({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <h2 className="text-xl font-bold text-navy">{title}</h2>
