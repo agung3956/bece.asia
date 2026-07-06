@@ -1,7 +1,7 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { AppItem, Locale } from "@/data/apps";
 import { localized } from "@/data/apps";
 import { categories } from "@/data/categories";
@@ -15,14 +15,14 @@ export function AppsClient({ apps, locale }: { apps: AppItem[]; locale: Locale }
     backToCategories: locale === "en" ? "Back to categories" : locale === "zh" ? "\u8fd4\u56de\u5206\u7c7b" : "Kembali ke kategori"
   };
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
-
-  useEffect(() => {
+  const [category, setCategory] = useState(() => {
+    if (typeof window === "undefined") return "all";
     const selectedCategory = new URLSearchParams(window.location.search).get("category");
     if (selectedCategory && categories.some((item) => item.key === selectedCategory)) {
-      setCategory(selectedCategory);
+      return selectedCategory;
     }
-  }, []);
+    return "all";
+  });
 
   const filteredApps = useMemo(() => {
     const q = query.trim().toLowerCase();

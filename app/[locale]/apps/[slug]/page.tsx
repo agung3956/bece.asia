@@ -3,7 +3,7 @@ import { AppDetailContent } from "@/components/app-detail-content";
 import { PageShell } from "@/components/page-shell";
 import { apps, type Locale } from "@/data/apps";
 
-const supportedLocales = ["en", "zh"] satisfies Locale[];
+const supportedLocales: Locale[] = ["en", "zh"];
 
 function resolveLocale(locale: string): Locale {
   if (supportedLocales.includes(locale as Locale)) return locale as Locale;

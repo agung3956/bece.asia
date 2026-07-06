@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { apps, localized, type Locale } from "@/data/apps";
 import { localePath } from "@/lib/routes";
 
@@ -14,11 +14,10 @@ export function UtilitiesClient({ locale }: { locale: Locale }) {
   const [year, setYear] = useState("2026");
   const [date, setDate] = useState("2026-07-04");
   const [score, setScore] = useState("4.87");
-  const [notes, setNotes] = useState("");
-
-  useEffect(() => {
-    setNotes(localStorage.getItem("bece-notes") ?? "");
-  }, []);
+  const [notes, setNotes] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return localStorage.getItem("bece-notes") ?? "";
+  });
 
   const formattedNumber = `${numberSeq}/${code}/${year}`;
   const formattedDate = useMemo(() => {
