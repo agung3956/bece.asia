@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowUpRight, Code2, PanelTopOpen } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Info as InfoIcon, PanelTopOpen } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Locale } from "@/data/apps";
@@ -46,18 +46,23 @@ export function AppDetailContent({ slug, locale }: { slug: string; locale: Local
         </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
-          {app.url !== "#" ? (
-            <a href={app.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-bold text-white transition hover:bg-navy-light">
+          {app.embedUrl ? (
+            <a href={app.embedUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full bg-navy px-5 py-3 text-sm font-bold text-white transition hover:bg-navy-light">
               {dict.apps.open}
               <ArrowUpRight size={17} />
             </a>
           ) : null}
-          {app.repo ? (
-            <a href={app.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-5 py-3 text-sm font-bold text-navy transition hover:border-teal">
-              <Code2 size={17} />
-              {dict.apps.repo}
-            </a>
-          ) : null}
+        </div>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-teal/20 bg-teal/5 p-5 text-sm leading-6 text-slate-700">
+        <div className="flex gap-3">
+          <InfoIcon className="mt-0.5 shrink-0 text-teal" size={18} />
+          <p>
+            {locale === "en"
+              ? "Public-use notice: this tool is independently maintained by bece.asia, is not an official government service, and must not be used as a substitute for official systems, regulations, or source documents. Do not enter confidential, personal, or operational data."
+              : "Pemberitahuan penggunaan publik: alat ini dikelola independen oleh bece.asia, bukan layanan resmi pemerintah, dan tidak menggantikan sistem, peraturan, atau dokumen sumber resmi. Jangan memasukkan data rahasia, pribadi, atau operasional."}
+          </p>
         </div>
       </div>
 
@@ -74,7 +79,16 @@ export function AppDetailContent({ slug, locale }: { slug: string; locale: Local
           </div>
           <iframe title={app.name[locale]} src={app.embedUrl} className="h-[760px] w-full border-0" loading="lazy" />
         </div>
-      ) : null}
+      ) : (
+        <div className="mt-8 rounded-[1.5rem] border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm">
+          <h2 className="text-2xl font-black text-navy">{locale === "en" ? "Internal version in preparation" : "Versi internal sedang disiapkan"}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            {locale === "en"
+              ? "This app is listed as a sanitized public concept. The runnable version will appear here after its old source is copied, cleaned, and checked for public-safe data."
+              : "Aplikasi ini tercatat sebagai konsep publik yang disanitasi. Versi yang dapat dijalankan akan muncul di sini setelah sumber lama disalin, dibersihkan, dan dicek agar aman untuk publik."}
+          </p>
+        </div>
+      )}
     </section>
   );
 }

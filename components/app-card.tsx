@@ -1,4 +1,4 @@
-import { ArrowUpRight, Boxes, Code2 } from "lucide-react";
+import { ArrowUpRight, Boxes } from "lucide-react";
 import Link from "next/link";
 import type { AppItem, Locale } from "@/data/apps";
 import { t } from "@/data/i18n";
@@ -31,12 +31,6 @@ export function AppCard({ app, locale }: { app: AppItem; locale: Locale }) {
           {dict.apps.detail}
           <ArrowUpRight size={16} />
         </Link>
-        {app.repo ? (
-          <a href={app.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-teal hover:text-navy">
-            <Code2 size={16} />
-            Repo
-          </a>
-        ) : null}
       </div>
     </article>
   );

@@ -18,6 +18,10 @@ export function Footer({ locale }: { locale: Locale }) {
           <Link href={localePath(locale, "/utilities")} className="text-slate-600 hover:text-navy">{dict.nav.utilities}</Link>
           <Link href={localePath(locale, "/roadmap")} className="text-slate-600 hover:text-navy">{dict.nav.roadmap}</Link>
           <Link href={localePath(locale, "/feedback")} className="text-slate-600 hover:text-navy">{dict.nav.feedback}</Link>
+          <Link href={localePath(locale, "/privacy")} className="text-slate-600 hover:text-navy">Privacy</Link>
+          <Link href={localePath(locale, "/terms")} className="text-slate-600 hover:text-navy">Terms</Link>
+          <Link href={localePath(locale, "/disclaimer")} className="text-slate-600 hover:text-navy">Disclaimer</Link>
+          <Link href={localePath(locale, "/data-policy")} className="text-slate-600 hover:text-navy">Data Policy</Link>
         </div>
       </div>
     </footer>

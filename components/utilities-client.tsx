@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { apps, type Locale } from "@/data/apps";
+import { localePath } from "@/lib/routes";
 
 const monthId = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 const monthEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -103,8 +104,8 @@ export function UtilitiesClient({ locale }: { locale: Locale }) {
 
       <UtilityCard title={copy.launcher}>
         <div className="grid gap-3">
-          {apps.filter((app) => app.url !== "#").slice(0, 6).map((app) => (
-            <a key={app.slug} href={app.url} target="_blank" rel="noreferrer" className="rounded-2xl bg-slate-50 p-3 text-sm font-semibold text-navy transition hover:bg-teal/10">
+          {apps.slice(0, 6).map((app) => (
+            <a key={app.slug} href={localePath(locale, `/apps/${app.slug}`)} className="rounded-2xl bg-slate-50 p-3 text-sm font-semibold text-navy transition hover:bg-teal/10">
               {app.name[locale]}
             </a>
           ))}

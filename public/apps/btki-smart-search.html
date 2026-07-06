@@ -15,10 +15,11 @@
  <div class="nav">
   <button class="active" data-tab="search">Pencarian</button>
   <button data-tab="compare">Bandingkan HS</button>
-  <button data-tab="notes">Catatan Pemeriksaan</button>
+  <button data-tab="notes">Catatan Klasifikasi</button>
   <button data-tab="import">Impor Data</button>
  </div>
- <div class="sidecard"><h3>Tips klasifikasi</h3><p>Mulai dari uraian barang, bahan utama, fungsi, tingkat proses, lalu cocokkan dengan heading. Jangan memakai pos residu bila ada pos yang lebih spesifik.</p></div>
+ <div class="sidecard"><h3>Tips klasifikasi</h3><p>Mulai dari uraian barang, bahan utama, fungsi, dan tingkat proses, lalu cocokkan dengan heading. Validasi hasil ke sumber resmi sebelum digunakan.</p></div>
+ <div class="sidecard"><h3>Catatan publik</h3><p>Alat ini independen, bukan layanan resmi pemerintah. Gunakan untuk referensi awal dan jangan masukkan data rahasia, pribadi, atau operasional.</p></div>
  <div class="sidecard"><h3>Mode offline</h3><p>Aplikasi ini berjalan sebagai file HTML tunggal. Bisa dibuka dari laptop tanpa server.</p></div>
 </aside>
 <main class="main">
@@ -26,7 +27,7 @@
  <div class="hero">
   <div class="card searchbox">
    <h2>Cari HS Code lebih cepat</h2>
-   <p>Ketik HS, nama barang, bahan, fungsi, atau kata kunci lartas.</p>
+   <p>Ketik HS, nama barang, bahan, fungsi, atau kata kunci referensi.</p>
    <div class="searchrow"><input id="q" placeholder="Contoh: ambergris, spider wood, zinc oxide, 4412, kitchen cabinet" autofocus><button class="btn" onclick="runSearch()">Cari</button></div>
    <div class="filters" id="filters"></div>
   </div>
@@ -34,7 +35,7 @@
    <div class="stat"><b id="countData">0</b><span>data referensi</span></div>
    <div class="stat"><b id="countShown">0</b><span>hasil tampil</span></div>
    <div class="stat"><b>GRI</b><span>cek uraian legal dulu</span></div>
-   <div class="stat"><b>INSW</b><span>validasi lartas</span></div>
+   <div class="stat"><b>RESMI</b><span>validasi ke sumber resmi</span></div>
   </div>
  </div>
  <div class="toolbar"><h3>Hasil pencarian</h3><div class="small">Klik kartu untuk detail</div></div>
@@ -45,7 +46,7 @@
  <div class="grid" id="compareResults" style="margin-top:16px"></div>
 </section>
 <section id="notes" class="section">
- <div class="card searchbox"><h2>Catatan pemeriksaan cepat</h2><p>Template pertanyaan untuk minta data tambahan dari pengguna jasa.</p>
+ <div class="card searchbox"><h2>Catatan klasifikasi cepat</h2><p>Template pertanyaan untuk meminta data tambahan dari pengguna.</p>
   <textarea class="textarea" id="noteBox">Data yang perlu diminta:
 1. Nama barang dan fungsi utama.
 2. Bahan/komposisi dominan.
@@ -53,7 +54,7 @@
 4. Spesifikasi teknis atau brosur.
 5. Proses pengerjaan: mentah, dikeringkan, dipoles, direkatkan, dirakit, atau menjadi barang jadi.
 6. Negara tujuan/asalan.
-7. Dokumen pendukung: invoice, packing list, MSDS/COA, izin teknis, SVLK/V-Legal, HC/PC bila relevan.
+7. Dokumen pendukung publik yang relevan: invoice, packing list, spesifikasi teknis, atau referensi resmi lain.
 
 Catatan GRI:
 - GRI 1: cocokkan uraian heading dan catatan bagian/bab.
@@ -62,7 +63,7 @@ Catatan GRI:
 </textarea><br><br><button class="btn" style="padding:14px 18px" onclick="copyNotes()">Salin Catatan</button></div>
 </section>
 <section id="import" class="section">
- <div class="card searchbox"><h2>Impor database tambahan</h2><p>Tempel JSON array agar database bisa diperluas. Format: hs, uraian, chapter, bm, pajak, lartas, catatan, keywords.</p>
+ <div class="card searchbox"><h2>Impor database tambahan</h2><p>Tempel JSON array agar database bisa diperluas. Format: hs, uraian, description, chapter, bm, bk, ppn, ppnbm.</p>
  <textarea class="textarea" id="jsonBox" placeholder='[{"hs":"4412.51.00","uraian":"...","chapter":"44","bm":"..."}]'></textarea><br><br><button class="btn" style="padding:14px 18px" onclick="loadJson()">Tambahkan Data</button></div>
 </section>
 </main>
