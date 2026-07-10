@@ -5,19 +5,14 @@ import type { LucideIcon } from "lucide-react";
 import {
   ArrowDownToLine,
   BarChart3,
-  Boxes,
   BrainCircuit,
   CheckCircle2,
-  ClipboardList,
   Compass,
   Download,
   Eraser,
   FileSpreadsheet,
   Flame,
-  Globe2,
-  Handshake,
   Layers3,
-  Lightbulb,
   PackageCheck,
   Plus,
   Rocket,
@@ -394,7 +389,7 @@ export function UmkmWorkspaceClient() {
 
         <div className="grid gap-4 lg:grid-cols-6">
           <MetricCard icon={UsersRound} label="UMKM" value={`${summary.total}`} tone="neutral" />
-          <MetricCard icon={GaugeIcon} label="Rata-rata skor" value={`${summary.avg}`} tone={summary.avg >= 70 ? "safe" : summary.avg >= 55 ? "medium" : "warning"} />
+          <MetricCard icon={TrendingUp} label="Rata-rata skor" value={`${summary.avg}`} tone={summary.avg >= 70 ? "safe" : summary.avg >= 55 ? "medium" : "warning"} />
           <MetricCard icon={Flame} label="Prioritas" value={`${summary.priority}`} tone="prime" />
           <MetricCard icon={Rocket} label="Export Prime" value={`${summary.exportPrime}`} tone="safe" />
           <MetricCard icon={Target} label="Overdue" value={`${summary.overdue}`} tone={summary.overdue === 0 ? "safe" : "danger"} />
@@ -644,10 +639,6 @@ function MetricCard({ icon: Icon, label, value, tone }: { icon: LucideIcon; labe
       <p className="mt-2 text-xl font-black text-navy">{value}</p>
     </div>
   );
-}
-
-function GaugeIcon(props: { size?: number }) {
-  return <TrendingUp {...props} />;
 }
 
 function InfoCard({ label, value }: { label: string; value: string }) {
