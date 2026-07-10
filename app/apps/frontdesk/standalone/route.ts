@@ -36,10 +36,10 @@ function sanitizeFrontDesk(source: string) {
   });
 
   // Use neutral sample metrics instead of legacy operational figures.
-  html = html.replace(/>571<\/g, ">120<");
-  html = html.replace(/>90\.5<\/g, ">90<");
-  html = html.replace(/>77<\/g, ">24<");
-  html = html.replace(/>3<\/g, ">5<");
+  html = html.replace(/>571</g, ">120<");
+  html = html.replace(/>90\.5</g, ">90<");
+  html = html.replace(/>77</g, ">24<");
+  html = html.replace(/>3</g, ">5<");
   html = html.replace(/IKM\s+SKM\s+T1\s+2026/gi, "SAMPLE SCORE");
   html = html.replace(/KONTEN\s+MEDIA\s+SOSIAL/gi, "SAMPLE CONTENT");
   html = html.replace(/TAMU\s+HARI\s+INI/gi, "SAMPLE VISIT");
