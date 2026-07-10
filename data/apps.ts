@@ -70,19 +70,19 @@ export const apps: AppItem[] = [
     officialStatus: "community-built"
   },
   {
-    slug: "youthpreneur-monitoring",
-    name: { en: "Program Monitoring", id: "Monitoring Program" },
-    tagline: { en: "Monitor teams, mentors, field evidence, and program progress.", id: "Pantau tim, mentor, bukti lapangan, dan progres program." },
-    description: { en: "A monitoring dashboard for entrepreneurship learning programs with team progress, evidence collection, and performance recap.", id: "Dashboard monitoring program pembelajaran kewirausahaan dengan progres tim, pengumpulan bukti, dan rekap kinerja." },
-    category: "Monitoring",
+    slug: "learning-monitoring",
+    name: { en: "Learning Monitoring", id: "Monitoring Pembelajaran" },
+    tagline: { en: "Monitor cohorts, teams, mentors, evidence, and learning progress.", id: "Pantau cohort, tim, mentor, bukti, dan progres pembelajaran." },
+    description: { en: "A general monitoring workspace for learning programs with team progress, evidence collection, coaching signals, and performance recap.", id: "Workspace monitoring umum untuk program pembelajaran dengan progres tim, pengumpulan bukti, sinyal pendampingan, dan rekap kinerja." },
+    category: "Learning",
     status: "beta",
     region: "Indonesia",
     scope: "Learning Program",
-    url: "/apps/youthpreneur-monitoring",
+    url: "/apps/learning-monitoring",
     featured: true,
-    tags: ["monitoring", "students", "MSME", "dashboard"],
-    utilities: { en: ["Team dashboard", "Evidence log", "Scoreboard"], id: ["Dashboard tim", "Log bukti", "Scoreboard"] },
-    lastUpdated: "2026-07-04",
+    tags: ["learning", "monitoring", "cohort", "dashboard"],
+    utilities: { en: ["Cohort dashboard", "Evidence log", "Progress radar"], id: ["Dashboard cohort", "Log bukti", "Radar progres"] },
+    lastUpdated: "2026-07-10",
     officialStatus: "community-built"
   },
   {
