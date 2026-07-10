@@ -1,6 +1,7 @@
 import type { AppItem, Locale } from "@/data/apps";
 import { apps } from "@/data/apps";
 import { businessToolsApps } from "@/data/business-tools-apps";
+import { communityGamesApps } from "@/data/community-games-apps";
 import { t } from "@/data/i18n-safe";
 import { AppsClient } from "./apps-client";
 import { SectionHeading } from "./section-heading";
@@ -50,7 +51,7 @@ export function AppsPageContent({ locale }: { locale: Locale }) {
         description={description}
       />
       <div className="mt-8">
-        <AppsClient apps={[...apps, ...businessToolsApps, palmOilCalculator]} locale={locale} />
+        <AppsClient apps={[...apps, ...businessToolsApps, ...communityGamesApps, palmOilCalculator]} locale={locale} />
       </div>
     </section>
   );
