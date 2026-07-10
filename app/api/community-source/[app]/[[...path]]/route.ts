@@ -42,18 +42,27 @@ function sanitizeText(value: string) {
 }
 
 function contentType(path: string, upstream: string | null) {
-  if (upstream) return upstream;
-  if (path.endsWith(".html")) return "text/html; charset=utf-8";
-  if (path.endsWith(".js")) return "application/javascript; charset=utf-8";
-  if (path.endsWith(".css")) return "text/css; charset=utf-8";
-  if (path.endsWith(".json") || path.endsWith(".webmanifest")) return "application/json; charset=utf-8";
-  if (path.endsWith(".svg")) return "image/svg+xml";
-  if (path.endsWith(".png")) return "image/png";
-  if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
-  if (path.endsWith(".webp")) return "image/webp";
-  if (path.endsWith(".mp3")) return "audio/mpeg";
-  if (path.endsWith(".wav")) return "audio/wav";
-  return "application/octet-stream";
+  const cleanPath = path.toLowerCase().split("?")[0].split("#")[0];
+
+  // raw.githubusercontent.com commonly returns text/plain for HTML, JS, and CSS.
+  // Prefer the file extension so browsers render/execute proxied app files correctly.
+  if (cleanPath.endsWith(".html") || cleanPath.endsWith(".htm")) return "text/html; charset=utf-8";
+  if (cleanPath.endsWith(".js") || cleanPath.endsWith(".mjs")) return "application/javascript; charset=utf-8";
+  if (cleanPath.endsWith(".css")) return "text/css; charset=utf-8";
+  if (cleanPath.endsWith(".json") || cleanPath.endsWith(".webmanifest")) return "application/json; charset=utf-8";
+  if (cleanPath.endsWith(".svg")) return "image/svg+xml";
+  if (cleanPath.endsWith(".png")) return "image/png";
+  if (cleanPath.endsWith(".jpg") || cleanPath.endsWith(".jpeg")) return "image/jpeg";
+  if (cleanPath.endsWith(".webp")) return "image/webp";
+  if (cleanPath.endsWith(".gif")) return "image/gif";
+  if (cleanPath.endsWith(".ico")) return "image/x-icon";
+  if (cleanPath.endsWith(".mp3")) return "audio/mpeg";
+  if (cleanPath.endsWith(".wav")) return "audio/wav";
+  if (cleanPath.endsWith(".woff2")) return "font/woff2";
+  if (cleanPath.endsWith(".woff")) return "font/woff";
+  if (cleanPath.endsWith(".ttf")) return "font/ttf";
+
+  return upstream || "application/octet-stream";
 }
 
 function rewriteHtml(html: string, app: string, currentPath: string) {
@@ -92,7 +101,7 @@ export async function GET(_request: Request, context: { params: Promise<{ app: s
 
   try {
     const response = await fetch(upstreamUrl, {
-      headers: { "user-agent": "bece.asia-community-app-proxy/1.0" },
+      headers: { "user-agent": "bece.asia-community-app-proxy/1.1" },
       next: { revalidate: 300 },
     });
     if (!response.ok) {
@@ -101,20 +110,21 @@ export async function GET(_request: Request, context: { params: Promise<{ app: s
 
     const type = contentType(normalized, response.headers.get("content-type"));
     const textual = /text|javascript|json|xml|svg/.test(type);
+    const commonHeaders = {
+      "content-type": type,
+      "content-disposition": "inline",
+      "cache-control": "public, max-age=300",
+      "x-content-type-options": "nosniff",
+    };
+
     if (!textual) {
       const data = await response.arrayBuffer();
-      return new NextResponse(data, { headers: { "content-type": type, "cache-control": "public, max-age=300" } });
+      return new NextResponse(data, { headers: commonHeaders });
     }
 
     let text = sanitizeText(await response.text());
     if (type.includes("text/html")) text = rewriteHtml(text, params.app, normalized);
-    return new NextResponse(text, {
-      headers: {
-        "content-type": type,
-        "cache-control": "public, max-age=300",
-        "x-content-type-options": "nosniff",
-      },
-    });
+    return new NextResponse(text, { headers: commonHeaders });
   } catch {
     return new NextResponse("Source app tidak dapat dimuat.", { status: 502 });
   }
