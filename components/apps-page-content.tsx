@@ -1,5 +1,6 @@
 import type { AppItem, Locale } from "@/data/apps";
 import { apps } from "@/data/apps";
+import { attendanceApps } from "@/data/attendance-apps";
 import { businessToolsApps } from "@/data/business-tools-apps";
 import { communityGamesApps } from "@/data/community-games-apps";
 import { creativeBusinessApps } from "@/data/creative-business-apps";
@@ -52,7 +53,7 @@ export function AppsPageContent({ locale }: { locale: Locale }) {
         description={description}
       />
       <div className="mt-8">
-        <AppsClient apps={[...apps, ...businessToolsApps, ...creativeBusinessApps, ...communityGamesApps, palmOilCalculator]} locale={locale} />
+        <AppsClient apps={[...apps, ...attendanceApps, ...businessToolsApps, ...creativeBusinessApps, ...communityGamesApps, palmOilCalculator]} locale={locale} />
       </div>
     </section>
   );
