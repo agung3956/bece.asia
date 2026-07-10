@@ -17,13 +17,19 @@ const sources: Record<string, SourceConfig> = {
   "bintang-penjaga": { owner: "agung3956", repo: "bintang-penjaga", defaultPath: "index.html", basePath: "", mode: "pages" },
 };
 
-const personalNames = [
-  "Agung Hermawan",
-  "Agung",
-  "Hermawan",
-  "Andre",
-  "Ibra",
-  "Faris",
+const personalNameReplacements: Array<[string, string]> = [
+  ["Ahmad Firdaus Thabrani", "Sample Name 1"],
+  ["Ahmad Firdaus", "Sample Name 1"],
+  ["Silsilia Raihana Adni", "Sample Name 2"],
+  ["Silsilia Raihana", "Sample Name 2"],
+  ["Muhammad Aqso Darussalam", "Sample Name 3"],
+  ["Muhammad Aqso", "Sample Name 3"],
+  ["Agung Hermawan", "Sample Name"],
+  ["Hermawan", "Sample Name"],
+  ["Agung", "Sample Name"],
+  ["Andre", "Sample Name"],
+  ["Ibra", "Sample Name"],
+  ["Faris", "Sample Name"],
 ];
 
 function escapeRegExp(value: string) {
@@ -32,8 +38,8 @@ function escapeRegExp(value: string) {
 
 function sanitizeText(value: string) {
   let next = value;
-  for (const name of personalNames) {
-    next = next.replace(new RegExp(escapeRegExp(name), "gi"), "Pengguna");
+  for (const [name, replacement] of personalNameReplacements) {
+    next = next.replace(new RegExp(escapeRegExp(name), "gi"), replacement);
   }
   next = next
     .replace(/https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec/gi, "")
@@ -43,9 +49,6 @@ function sanitizeText(value: string) {
 
 function contentType(path: string, upstream: string | null) {
   const cleanPath = path.toLowerCase().split("?")[0].split("#")[0];
-
-  // raw.githubusercontent.com commonly returns text/plain for HTML, JS, and CSS.
-  // Prefer the file extension so browsers render/execute proxied app files correctly.
   if (cleanPath.endsWith(".html") || cleanPath.endsWith(".htm")) return "text/html; charset=utf-8";
   if (cleanPath.endsWith(".js") || cleanPath.endsWith(".mjs")) return "application/javascript; charset=utf-8";
   if (cleanPath.endsWith(".css")) return "text/css; charset=utf-8";
@@ -61,8 +64,29 @@ function contentType(path: string, upstream: string | null) {
   if (cleanPath.endsWith(".woff2")) return "font/woff2";
   if (cleanPath.endsWith(".woff")) return "font/woff";
   if (cleanPath.endsWith(".ttf")) return "font/ttf";
-
   return upstream || "application/octet-stream";
+}
+
+function familyMissionMigrationScript() {
+  return `<script>
+(function sanitizeFamilyMissionStorage() {
+  try {
+    const key = "tombolHadiahState";
+    const raw = localStorage.getItem(key);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    if (Array.isArray(state.anak)) {
+      state.anak = state.anak.map((child, index) => ({
+        ...child,
+        nama: "Sample Name " + (index + 1)
+      }));
+      localStorage.setItem(key, JSON.stringify(state));
+    }
+  } catch {
+    localStorage.removeItem("tombolHadiahState");
+  }
+})();
+</script>`;
 }
 
 function rewriteHtml(html: string, app: string, currentPath: string) {
@@ -74,13 +98,20 @@ function rewriteHtml(html: string, app: string, currentPath: string) {
     const resolved = clean.startsWith("/") ? clean.slice(1) : `${directory}${clean}`;
     return `${attr}=${quote}${prefix}${resolved}${quote}`;
   };
-  return html
+
+  let rewritten = html
     .replace(/(src|href)=(['"])([^'"]+)\2/gi, rewrite)
     .replace(/url\((['"]?)(?!https?:|data:)([^)'"\s]+)\1\)/gi, (_match, quote, url) => {
       const clean = String(url).replace(/^\.\//, "");
       const resolved = clean.startsWith("/") ? clean.slice(1) : `${directory}${clean}`;
       return `url(${quote}${prefix}${resolved}${quote})`;
     });
+
+  if (app === "family-mission") {
+    rewritten = rewritten.replace(/<head([^>]*)>/i, `<head$1>${familyMissionMigrationScript()}`);
+  }
+
+  return rewritten;
 }
 
 async function getUpstream(config: SourceConfig, path: string) {
@@ -101,7 +132,7 @@ export async function GET(_request: Request, context: { params: Promise<{ app: s
 
   try {
     const response = await fetch(upstreamUrl, {
-      headers: { "user-agent": "bece.asia-community-app-proxy/1.1" },
+      headers: { "user-agent": "bece.asia-community-app-proxy/1.2" },
       next: { revalidate: 300 },
     });
     if (!response.ok) {
