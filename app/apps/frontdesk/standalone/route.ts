@@ -14,8 +14,11 @@ function sanitizeFrontDesk(source: string) {
 
   const replacements: Array<[RegExp, string]> = [
     [/Frontdesk Premium - Bea Cukai Pangkalpinang/gi, "FrontDesk Premium"],
+    [/Selamat\s+Datang\s+di\s+Layanan\s+Bea\s*Cukai/gi, "Selamat Datang di FrontDesk"],
+    [/Layanan\s+Bea\s*Cukai/gi, "Layanan FrontDesk"],
     [/Bea\s*Cukai\s*Pangkal\s*Pinang/gi, "FrontDesk"],
     [/Bea\s*Cukai\s*Pangkalpinang/gi, "FrontDesk"],
+    [/Bea\s*Cukai/gi, "FrontDesk"],
     [/KPPBC\s*TMP\s*C\s*Pangkal\s*Pinang/gi, "FrontDesk"],
     [/KPPBC\s*TMP\s*C\s*Pangkalpinang/gi, "FrontDesk"],
     [/Kantor\s+Bea\s+Cukai\s+Pangkal\s*Pinang/gi, "FrontDesk"],
@@ -31,6 +34,16 @@ function sanitizeFrontDesk(source: string) {
   replacements.forEach(([pattern, replacement]) => {
     html = replaceAllInsensitive(html, pattern, replacement);
   });
+
+  // Use neutral sample metrics instead of legacy operational figures.
+  html = html.replace(/>571<\/g, ">120<");
+  html = html.replace(/>90\.5<\/g, ">90<");
+  html = html.replace(/>77<\/g, ">24<");
+  html = html.replace(/>3<\/g, ">5<");
+  html = html.replace(/IKM\s+SKM\s+T1\s+2026/gi, "SAMPLE SCORE");
+  html = html.replace(/KONTEN\s+MEDIA\s+SOSIAL/gi, "SAMPLE CONTENT");
+  html = html.replace(/TAMU\s+HARI\s+INI/gi, "SAMPLE VISIT");
+  html = html.replace(/TOTAL\s+LAYANAN/gi, "SAMPLE SERVICE");
 
   // Replace the official-logo slot with a neutral FrontDesk monogram while preserving layout.
   html = html.replace(
@@ -48,13 +61,16 @@ function sanitizeFrontDesk(source: string) {
 <script>
 (function sanitizeBeceFrontDesk(){
   var replacementMap = [
-    [/Bea\\s*Cukai\\s*Pangkal\\s*Pinang/gi, 'FrontDesk'],
-    [/Bea\\s*Cukai\\s*Pangkalpinang/gi, 'FrontDesk'],
-    [/KPPBC\\s*TMP\\s*C\\s*Pangkal\\s*Pinang/gi, 'FrontDesk'],
-    [/KPPBC\\s*TMP\\s*C\\s*Pangkalpinang/gi, 'FrontDesk'],
-    [/Direktorat\\s+Jenderal\\s+Bea\\s+dan\\s+Cukai/gi, 'Public Service Desk'],
-    [/Kementerian\\s+Keuangan/gi, 'Public Service'],
-    [/\\bDJBC\\b/gi, 'Service Desk']
+    [/Selamat\s+Datang\s+di\s+Layanan\s+Bea\s*Cukai/gi, 'Selamat Datang di FrontDesk'],
+    [/Layanan\s+Bea\s*Cukai/gi, 'Layanan FrontDesk'],
+    [/Bea\s*Cukai\s*Pangkal\s*Pinang/gi, 'FrontDesk'],
+    [/Bea\s*Cukai\s*Pangkalpinang/gi, 'FrontDesk'],
+    [/Bea\s*Cukai/gi, 'FrontDesk'],
+    [/KPPBC\s*TMP\s*C\s*Pangkal\s*Pinang/gi, 'FrontDesk'],
+    [/KPPBC\s*TMP\s*C\s*Pangkalpinang/gi, 'FrontDesk'],
+    [/Direktorat\s+Jenderal\s+Bea\s+dan\s+Cukai/gi, 'Public Service Desk'],
+    [/Kementerian\s+Keuangan/gi, 'Public Service'],
+    [/\bDJBC\b/gi, 'Service Desk']
   ];
 
   function cleanTextNode(node) {
@@ -71,7 +87,39 @@ function sanitizeFrontDesk(source: string) {
     Array.prototype.slice.call(node.childNodes || []).forEach(walk);
   }
 
+  function setSampleMetrics() {
+    var samples = [
+      ['dashTotalTamu', '5'],
+      ['dashTamuHadir', '1'],
+      ['dashTamuPulang', '4'],
+      ['dashTotalBulan', '120'],
+      ['dashTotalInfo', '120'],
+      ['dashTotalKlinik', '12'],
+      ['dashKlinikAktif', '5'],
+      ['dashKlinikSelesai', '7'],
+      ['dashKlinikUMKM', '10']
+    ];
+    samples.forEach(function(pair){
+      var el = document.getElementById(pair[0]);
+      if (el) el.textContent = pair[1];
+    });
+
+    var statCards = Array.prototype.slice.call(document.querySelectorAll('.stat-item'));
+    statCards.forEach(function(card){
+      var label = card.querySelector('.label');
+      var value = card.querySelector('.value');
+      if (!label || !value) return;
+      var text = (label.textContent || '').toLowerCase();
+      if (text.includes('total layanan')) { label.textContent = 'Sample Service'; value.textContent = '120'; }
+      if (text.includes('ikm') || text.includes('skm')) { label.textContent = 'Sample Score'; value.textContent = '90'; }
+      if (text.includes('konten media sosial')) { label.textContent = 'Sample Content'; value.textContent = '24'; }
+      if (text.includes('tamu hari ini')) { label.textContent = 'Sample Visit'; value.textContent = '5'; }
+      if (text.includes('januari') || text.includes('februari') || text.includes('maret')) { value.textContent = '0'; }
+    });
+  }
+
   walk(document.body);
+  setSampleMetrics();
 
   Array.prototype.slice.call(document.querySelectorAll('img')).forEach(function(img){
     var raw = ((img.getAttribute('src') || '') + ' ' + (img.getAttribute('alt') || '')).toLowerCase();
