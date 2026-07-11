@@ -1,6 +1,6 @@
 # bece.asia
 
-Public digital tools for trade, documents, learning, and everyday workflows.
+Public digital tools for trade, documents, learning, research, and everyday workflows.
 
 ## Stack
 
@@ -8,7 +8,6 @@ Public digital tools for trade, documents, learning, and everyday workflows.
 - TypeScript
 - Tailwind CSS
 - lucide-react
-- Vercel-ready deployment
 
 ## Language
 
@@ -25,14 +24,19 @@ npm run build
 
 ## Data editing
 
-Edit app catalog data in `data/apps.ts`. App entries should be sanitized and contain only public-safe descriptions, sample data, and public links before they are listed.
+Edit app catalog data in `data/apps.ts`. App entries must contain only public-safe descriptions, neutral sample data, and links owned by `bece.asia`.
 
 Edit bilingual UI copy in `data/i18n.ts`.
 
-## Deployment
+## Privacy audit
 
-Vercel should build from the latest commit on `main`.
+```bash
+npm run privacy:audit
+npm run privacy:audit:strict
+```
+
+The strict audit fails when high-risk identity, contact, source-provenance, or secret patterns are detected.
 
 ## Disclaimer
 
-bece.asia is an independent utility portal for productivity, learning, and workflow experiments. It is not an official government website and does not replace official systems, procedures, or regulations.
+bece.asia is an independent utility portal for productivity, learning, research, and workflow experiments. It is not an official institutional website and does not replace official systems, procedures, or regulations.
